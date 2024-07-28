@@ -1,0 +1,30 @@
+Install venv env
+Sudo apt install python3 python3-pip python3-venv
+
+mkdir venv1
+or
+python3 -m venv venv1
+
+pwd
+/home/pi/venv1
+
+source venv1/bin/activate
+(venv1) pi@raspberry:~/venv1/
+
+pip list
+Package    Version
+---------- -------
+pip        23.0.1
+setuptools 66.1.1
+
+Remove dir
+rm -d venv1
+rm -r venv1
+
+
+
+
+
+
+
+
