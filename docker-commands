@@ -9,3 +9,130 @@ docker image save sonusukralia/spark:1.0 -o sonuspark.tar
 docker rmi -f $(docker images -f "dangling=true" -q)
 
 docker run -it sonusukralia/spark:1.1 bash
+
+
+docker pull --platform linux/arm64 apache/spark:3.5.1-scala2.12-java11-python3-r-ubuntu
+
+
+Spark image with jar files
+{
+FROM apache/spark:3.5.1-scala2.12-java11-python3-r-ubuntu
+USER root
+COPY aws-java-sdk-bundle-1.12.276.jar /opt/spark/jars
+COPY hadoop-aws-3.3.4.jar /opt/spark/jars
+WORKDIR /app
+COPY main.py .
+COPY main1.py .
+}
+
+
+
+kubectl create clusterrolebinding spark-role --clusterrole=edit --serviceaccount=default:spark --namespace=default
+
+export SPARK_HOME=/home/pi/spark-3.5.1-bin-hadoop3
+
+pico ~/.kube/config
+pico /etc/rancher/k3s/k3s.yaml
+
+ pico ~/.kube/config
+
+pico ~/.bashrc
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64
+
+
+
+tar -xvf spark-3.5.1-bin-hadoop3.tgz 
+
+
+
+kubectl get pods -n spark-jobs -o wide -w
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Minio login 
+Access key : BayRWhadw0165YK7
+Secret key : 8AN7KW1GT8OAuzB1CsHTvviuvnujZomF
+
+
+bucket login
+Access key : WKpCKYo5nx3n9hnUzlYs
+Secret key : BAyGGngWAu9zGytn6W0HR4seOoX5GDVQ1v3T83c1
+
+
+kubectl create secret generic minio-secret --from-literal=AWS_ACCESS_KEY_ID=hsEfEUIK19N4KYgvw1lx --from-literal=AWS_SECRET_ACCESS_KEY=T21pYUJ07SOLJBlh89tgKviHRfYDgh55C76I0dke --from-literal=ENDPOINT=http://s3a-hl.s3a:9000 --from-literal=AWS_REGION=us-east-1 --namespace spark-operator
+
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+./spark-submit --deploy-mode cluster --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark --conf spark.kubernetes.container.image.pullPolicy=Always --conf spark.hadoop.fs.s3a.path.style.access=True --conf spark.hadoop.fs.s3a.access.key=WKpCKYo5nx3n9hnUzlYs --conf spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem --conf spark.hadoop.fs.s3a.secret.key=BAyGGngWAu9zGytn6W0HR4seOoX5GDVQ1v3T83c1 --conf spark.hadoop.fs.s3a.path.style.access=True --conf spark.hadoop.fs.s3a.connection.ssl.enabled=False --conf spark.hadoop.fs.s3a.endpoint=http://s3a-hl.s3a:9000 --conf spark.kubernetes.container.image=sonusukralia/spark:1.1 --conf spark.master=k8s://https://127.0.0.1:6443 local:///app/main1.py
+
+
+
+docker pull --platform linux/arm64 apache/spark:3.5.1-scala2.12-java11-python3-r-ubuntu
+docker build -t sonusukralia/spark:1.0 .
+docker push sonusukralia/spark:1.0
+docker build -t sonusukralia/spark:1.1 .
+docker push sonusukralia/spark:1.1
+
+docker image save sonusukralia/spark:1.0 -o sonuspark.tar
+
+docker rmi -f $(docker images -f "dangling=true" -q)
+
+docker run -it sonusukralia/spark:1.1 bash
+
+
+
+
+Create a Kubectl config file
+mkdir ~/.kube
+Generate kubeconfig for your clusters
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config && sudo chown $USER ~/.kube/config
+Copy and export the kubeconfig setting
+sudo chmod 600 ~/.kube/config && export KUBECONFIG=~/.kube/config
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
