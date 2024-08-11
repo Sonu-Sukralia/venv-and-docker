@@ -123,6 +123,25 @@ sudo chmod 600 ~/.kube/config && export KUBECONFIG=~/.kube/config
 
 
 
+docker pull --platform linux/arm64 apache/spark:3.5.1-scala2.12-java11-python3-r-ubuntu
+docker build -t sonusukralia/spark:1.0 .
+docker push sonusukralia/spark:1.0
+docker build -t sonusukralia/spark:1.1 .
+docker push sonusukralia/spark:1.1
+
+docker image save sonusukralia/spark:1.0 -o sonuspark.tar
+
+docker rmi -f $(docker images -f "dangling=true" -q)
+
+docker run -it sonusukralia/spark:1.1 bash
+
+
+Create a Kubectl config file
+mkdir ~/.kube
+Generate kubeconfig for your clusters
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config && sudo chown $USER ~/.kube/config
+Copy and export the kubeconfig setting
+sudo chmod 600 ~/.kube/config && export KUBECONFIG=~/.kube/config
 
 
 
